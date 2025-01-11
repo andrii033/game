@@ -27,4 +27,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* BlockMesh;
 
+	// Variables for scaling
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Scaling")
+	float ScalingSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Scaling")
+	FVector TargetScale;
 };

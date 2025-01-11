@@ -31,8 +31,11 @@ AMyBlock::AMyBlock()
     }
 
     // Set the initial scale of the block
-    BlockMesh->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+    BlockMesh->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
 
+    // Initialize scaling variables
+    ScalingSpeed = 1.5f; // Scale per second
+    TargetScale = FVector(0.5f, 0.5f, 0.5f); // Target scale
 }
 
 
@@ -48,5 +51,9 @@ void AMyBlock::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+    // Gradually increase the scale of the block
+    FVector CurrentScale = BlockMesh->GetComponentScale();
+    FVector NewScale = FMath::VInterpTo(CurrentScale, TargetScale, DeltaTime, ScalingSpeed);
+    BlockMesh->SetWorldScale3D(NewScale);
 }
 
