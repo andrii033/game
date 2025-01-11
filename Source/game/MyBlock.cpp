@@ -10,7 +10,7 @@ AMyBlock::AMyBlock()
 
     // Create a static mesh component
     BlockMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BlockMesh"));
-    BlockMesh->SetSimulatePhysics(true); // Disable physics simulation
+    BlockMesh->SetSimulatePhysics(false); // Disable physics simulation
     BlockMesh->SetCollisionProfileName(UCollisionProfile::BlockAllDynamic_ProfileName);
     BlockMesh->SetMassOverrideInKg(NAME_None, 100.0f); // Increase mass to make the cubes more stable
     BlockMesh->SetLinearDamping(5.0f); // Increase linear damping to reduce movement
