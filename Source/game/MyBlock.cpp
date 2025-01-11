@@ -31,7 +31,8 @@ AMyBlock::AMyBlock()
     }
 
     // Set the initial scale of the block
-    BlockMesh->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
+    BlockMesh->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+
 }
 
 

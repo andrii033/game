@@ -38,20 +38,42 @@ AgameProjectile::AgameProjectile()
 
 void AgameProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+    if (MyBlock)
+    {
+        // Use the hit location to spawn the block
+        FVector SpawnLocation = Hit.ImpactPoint;
 
-	if (MyBlock)
-	{
-		// Use the hit location to spawn the block
-		FVector SpawnLocation = Hit.ImpactPoint;
+        // Define the block size (assuming 100 units in each dimension)
+        const float BlockSize = 50.0f;
 
-		// Spawn the block
-		for (int i = 0; i < 10; i++)
-		{
-			// Randomize the spawn location slightly by adding a random vector
+        // Adjust the spawn location to ensure the blocks touch at the sides
+        FVector AdjustedSpawnLocation = SpawnLocation + Hit.Normal * BlockSize;
 
-			AMyBlock* SpawnedBlock = GetWorld()->SpawnActor<AMyBlock>(MyBlock, SpawnLocation, FRotator::ZeroRotator);
-		}
+        // Round each component to the nearest multiple of 100
+        AdjustedSpawnLocation.X = FMath::RoundToInt(AdjustedSpawnLocation.X / BlockSize) * BlockSize;
+        AdjustedSpawnLocation.Y = FMath::RoundToInt(AdjustedSpawnLocation.Y / BlockSize) * BlockSize;
+        AdjustedSpawnLocation.Z = FMath::RoundToInt(AdjustedSpawnLocation.Z / BlockSize) * BlockSize;
 
-		Destroy();
-	}
+        // Spawn the block
+        for (int i = 0; i < 1; i++)
+        {
+            AMyBlock* SpawnedBlock = GetWorld()->SpawnActor<AMyBlock>(MyBlock, AdjustedSpawnLocation, FRotator::ZeroRotator);
+            if (SpawnedBlock)
+            {
+                // Optionally, add debug message
+                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Block Spawned at: %s"), *SpawnedBlock->GetActorLocation().ToString()));
+            }
+
+            // Update the spawn location for the next block
+            AdjustedSpawnLocation += Hit.Normal * BlockSize;
+
+            // Round each component to the nearest multiple of 100 again
+            AdjustedSpawnLocation.X = FMath::RoundToInt(AdjustedSpawnLocation.X / BlockSize) * BlockSize;
+            AdjustedSpawnLocation.Y = FMath::RoundToInt(AdjustedSpawnLocation.Y / BlockSize) * BlockSize;
+            AdjustedSpawnLocation.Z = FMath::RoundToInt(AdjustedSpawnLocation.Z / BlockSize) * BlockSize;
+        }
+
+        Destroy();
+    }
 }
+
