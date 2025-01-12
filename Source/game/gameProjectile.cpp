@@ -50,7 +50,7 @@ void AgameProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 		if (SpawnedBlock)
 		{
 			// Optionally, add debug message
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Block Spawned at: %s"), *SpawnedBlock->GetActorLocation().ToString()));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Block Spawned at: %s"), *SpawnedBlock->GetActorLocation().ToString()));
 		}
 
 		Destroy();

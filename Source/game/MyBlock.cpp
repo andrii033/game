@@ -41,7 +41,7 @@ void AMyBlock::BeginPlay()
     Super::BeginPlay();
 
     // Set a timer to disable physics after 2 seconds
-    GetWorldTimerManager().SetTimer(TimerHandle, this, &AMyBlock::DisablePhysics, 2.0f, false);
+    GetWorldTimerManager().SetTimer(TimerHandle, this, &AMyBlock::DisablePhysics, 0.5f, false);
 }
 
 // Called every frame
