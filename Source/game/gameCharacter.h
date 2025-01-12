@@ -22,7 +22,7 @@ class AgameCharacter : public ACharacter
 	GENERATED_BODY()
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Mesh, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Mesh, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh1P;
 
 	/** First person camera */
@@ -48,12 +48,15 @@ class AgameCharacter : public ACharacter
 public:
 	AgameCharacter();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int ShotMode = 0; //0 - create, 1 - destroy
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
 
 protected:
 	// APawn interface

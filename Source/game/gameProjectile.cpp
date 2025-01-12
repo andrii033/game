@@ -3,7 +3,9 @@
 #include "gameProjectile.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "gameCharacter.h"
 #include "Components/SphereComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 
 AgameProjectile::AgameProjectile()
@@ -38,6 +40,24 @@ AgameProjectile::AgameProjectile()
 
 void AgameProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+    AgameCharacter* PlayerCharachter = Cast<AgameCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+    switch (PlayerCharachter->ShotMode)
+    {
+    case 0:
+        CreatedBlock(Hit);
+        break;
+    case 1:
+        DestroyedBlock(Hit);
+        break;
+    default:
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("non-existent shot mode: %s"), PlayerCharachter->ShotMode));
+        break;
+    }
+    Destroy();
+}
+
+void AgameProjectile::CreatedBlock(const FHitResult& Hit)
+{
     if (MyBlock)
     {
         // Use the hit location to spawn the block
@@ -60,6 +80,7 @@ void AgameProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
             AMyBlock* SpawnedBlock = GetWorld()->SpawnActor<AMyBlock>(MyBlock, AdjustedSpawnLocation, FRotator::ZeroRotator);
             if (SpawnedBlock)
             {
+                SpawnedBlock->Tags.Add("MyBlock");
                 // Optionally, add debug message
                 GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Block Spawned at: %s"), *SpawnedBlock->GetActorLocation().ToString()));
             }
@@ -72,8 +93,15 @@ void AgameProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
             AdjustedSpawnLocation.Y = FMath::RoundToInt(AdjustedSpawnLocation.Y / BlockSize) * BlockSize;
             AdjustedSpawnLocation.Z = FMath::RoundToInt(AdjustedSpawnLocation.Z / BlockSize) * BlockSize;
         }
-
-        Destroy();
     }
 }
+
+void AgameProjectile::DestroyedBlock(const FHitResult& Hit)
+{
+    if (Hit.GetActor()->Tags.FindByKey("MyBlock"))
+    {
+        Hit.GetActor()->Destroy();
+    }
+}
+
 

@@ -67,6 +67,7 @@ void AgameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AgameCharacter::Look);
+
 	}
 	else
 	{
@@ -100,3 +101,5 @@ void AgameCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+
