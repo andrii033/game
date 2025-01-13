@@ -38,20 +38,24 @@ AgameProjectile::AgameProjectile()
 
 void AgameProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-
 	if (MyBlock)
 	{
 		// Use the hit location to spawn the block
 		FVector SpawnLocation = Hit.ImpactPoint;
 
-		// Spawn the block
-		for (int i = 0; i < 10; i++)
-		{
-			// Randomize the spawn location slightly by adding a random vector
+		FVector AdjustedSpawnLocation = SpawnLocation + Hit.Normal;
 
-			AMyBlock* SpawnedBlock = GetWorld()->SpawnActor<AMyBlock>(MyBlock, SpawnLocation, FRotator::ZeroRotator);
+		// Spawn the block
+		AMyBlock* SpawnedBlock = GetWorld()->SpawnActor<AMyBlock>(MyBlock, AdjustedSpawnLocation, FRotator::ZeroRotator);
+		if (SpawnedBlock)
+		{
+			// Optionally, add debug message
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Block Spawned at: %s"), *SpawnedBlock->GetActorLocation().ToString()));
 		}
 
 		Destroy();
 	}
 }
+
+
+
